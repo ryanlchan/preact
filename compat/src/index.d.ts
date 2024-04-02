@@ -180,6 +180,14 @@ declare namespace React {
 		? PropsWithoutRef<P> & RefAttributes<InstanceType<C>>
 		: PropsWithRef<ComponentProps<C>>;
 
+	type PropsWithRef<P> = 'ref' extends keyof P
+		? P extends { ref?: infer R | undefined }
+			? string extends R
+				? PropsWithoutRef<P> & { ref?: Exclude<R, string> | undefined }
+				: P
+			: P
+		: P;
+
 	export function flushSync<R>(fn: () => R): R;
 	export function flushSync<A, R>(fn: (a: A) => R, a: A): R;
 
